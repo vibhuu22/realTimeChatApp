@@ -50,9 +50,12 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 app.use(cors({
-  origin: [CLIENT_URL, "http://localhost:3000"],
-  credentials: true
+  origin: CLIENT_URL,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+;
 
 
 // Routes
