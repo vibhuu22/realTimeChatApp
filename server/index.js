@@ -49,12 +49,28 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
+const allowedOrigins = [
+  "https://realtime-chatapp-pied.vercel.app",
+  "http://localhost:3000",
+];
+
 app.use(cors({
-  origin: CLIENT_URL,
+  origin: function (origin, callback) {
+    // allow requests with no origin (Postman, curl, health checks)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    console.error("❌ Blocked by CORS:", origin);
+    return callback(null, false);
+  },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 }));
+
 
 
 
