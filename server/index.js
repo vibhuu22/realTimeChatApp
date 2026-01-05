@@ -50,19 +50,12 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || origin === CLIENT_URL) {
-      callback(null, true);
-    } else {
-      callback(new Error("CORS not allowed"));
-    }
-  },
+  origin: CLIENT_URL,
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 }));
 
-app.options("*", cors());
 
 
 
