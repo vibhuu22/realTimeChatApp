@@ -26,7 +26,8 @@ const app = express();
 const server = http.createServer(app);
 
 
-const CLIENT_URL = process.env.CLIENT_URL ;
+const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:3000";
+
 // Socket.Io setup with CORS
 
 const io = new Server(server, {
@@ -49,9 +50,10 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 app.use(cors({
-   origin: CLIENT_URL, 
+  origin: [CLIENT_URL, "http://localhost:3000"],
   credentials: true
 }));
+
 
 // Routes
 
@@ -202,13 +204,6 @@ io.on('connection', (socket)=>{
   });
 });
 
-// Start server (use 'server' not 'app')
-server.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`🔌 WebSocket server ready`);
-});
-
-
 app.get('/api/status', (req,res)=>{
     res.json({status: 'active', timestamp: Date.now()});
 });
@@ -218,6 +213,15 @@ app.post('/api/echo', (req,res)=>{
     res.json({message: 'Request recived at /api/echo'});
     console.log('Request recived at /api/echo');
 })
+
+
+// Start server (use 'server' not 'app')
+server.listen(PORT, () => {
+console.log(`🚀 Server running on port ${PORT}`);
+console.log(`🔌 WebSocket server ready`);
+});
+
+
 
 
 
